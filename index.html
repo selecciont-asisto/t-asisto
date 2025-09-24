@@ -138,6 +138,30 @@
                         </div>
                     </div>
 
+                    <!-- Horas de dedicación y días disponibles -->
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-semibold text-gray-800 pt-4">Disponibilidad de Horario</h2>
+
+                        <label class="block text-sm font-medium text-gray-700">Tiempo de dedicación</label>
+                        <select id="tiempoDedicacion" required>
+                            <option value="">Selecciona...</option>
+                            <option value="2-4">2 a 4 horas al día</option>
+                            <option value="4-6">4 a 6 horas al día</option>
+                            <option value="8">8 horas al día</option>
+                        </select>
+
+                        <label class="block text-sm font-medium text-gray-700">Días disponibles</label>
+                        <select id="diasDisponibles" required>
+                            <option value="">Selecciona...</option>
+                            <option value="1">1 día a la semana</option>
+                            <option value="2">2 días a la semana</option>
+                            <option value="3">3 días a la semana</option>
+                            <option value="4">4 días a la semana</option>
+                            <option value="5">5 días a la semana</option>
+                            <option value="fines-de-semana">Solo fines de semanas</option>
+                        </select>
+                    </div>
+
                     <!-- Botón de Envío -->
                     <div class="flex justify-center pt-6">
                         <button type="submit" class="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-indigo-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
