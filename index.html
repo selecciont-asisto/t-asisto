@@ -1,1 +1,297 @@
-Hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proceso de Selección - T-Asisto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        input, select, textarea {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 0.75rem;
+            width: 100%;
+            transition: border-color 0.2s ease-in-out;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="container mx-auto px-4">
+        <div class="card">
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Proceso de Selección</h1>
+            <p class="text-center text-gray-600 mb-8">
+                Por favor, completa el siguiente formulario para iniciar tu proceso como T-Asistente.
+            </p>
+
+            <form id="caracterizacionForm" class="space-y-6">
+                <!-- Fecha de diligenciamiento - Campo no editable -->
+                <div class="space-y-4">
+                    <label class="block text-sm font-medium text-gray-700">Fecha de diligenciamiento</label>
+                    <input type="date" id="fechaDiligenciamiento" readonly class="bg-gray-100 cursor-not-allowed">
+                </div>
+
+                <!-- Ubicación Geográfica -->
+                <div class="space-y-4">
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Ubicación</h2>
+                    
+                    <label class="block text-sm font-medium text-gray-700">País</label>
+                    <select id="pais" required>
+                        <option value="">Selecciona tu país...</option>
+                        <!-- Los países se cargarán dinámicamente aquí -->
+                    </select>
+
+                    <div id="colombiaFields" class="hidden space-y-4">
+                        <label class="block text-sm font-medium text-gray-700">Departamento</label>
+                        <select id="departamento">
+                            <option value="">Selecciona tu departamento...</option>
+                            <!-- Los departamentos se cargarán dinámicamente aquí -->
+                        </select>
+
+                        <label class="block text-sm font-medium text-gray-700">Ciudad</label>
+                        <select id="ciudad">
+                            <option value="">Selecciona tu ciudad...</option>
+                            <!-- Las ciudades se cargarán dinámicamente aquí -->
+                        </select>
+                    </div>
+
+                    <div id="otherCountryField" class="hidden space-y-4">
+                        <label class="block text-sm font-medium text-gray-700">Ciudad</label>
+                        <input type="text" id="ciudadOtroPais" placeholder="Tu ciudad" />
+                    </div>
+                </div>
+
+                <!-- Información de Contacto -->
+                <div class="space-y-4">
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Información Personal y de Contacto</h2>
+                    
+                    <label class="block text-sm font-medium text-gray-700">Nombre Completo</label>
+                    <input type="text" id="nombreCompleto" placeholder="Tu Nombre" required>
+
+                    <label class="block text-sm font-medium text-gray-700">Número de Identificación (DNI/Cédula)</label>
+                    <input type="text" id="identificacion" placeholder="Tu número de identificación" required>
+
+                    <label class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+                    <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+
+                    <label class="block text-sm font-medium text-gray-700">Número de Teléfono</label>
+                    <input type="tel" id="telefono" placeholder="Tu número de teléfono" required>
+
+                    <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+                    <input type="date" id="fechaNacimiento" required>
+
+                    <!-- Campo de Edad - Calculado automáticamente y no editable -->
+                    <label class="block text-sm font-medium text-gray-700">Edad</label>
+                    <input type="text" id="edad" readonly class="bg-gray-100 cursor-not-allowed" placeholder="Calculado automáticamente">
+
+                    <!-- Mensaje de error para menores de edad -->
+                    <div id="ageError" class="hidden text-red-600 text-sm p-4 rounded-lg mt-4 bg-red-100 border border-red-200">
+                        <p>No puedes continuar con el proceso de selección porque eres menor de 18 años.</p>
+                    </div>
+                </div>
+
+                <!-- Contenido adicional del formulario (se oculta si el candidato es menor de edad) -->
+                <div id="restOfForm" class="space-y-6">
+                    <!-- Educación y Experiencia -->
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-semibold text-gray-800 pt-4">Educación y Experiencia</h2>
+
+                        <label class="block text-sm font-medium text-gray-700">Nivel de Estudios</label>
+                        <select id="nivelEstudios" required>
+                            <option value="">Selecciona...</option>
+                            <option value="bachiller">Bachiller</option>
+                            <option value="tecnico">Técnico</option>
+                            <option value="tecnologo">Tecnólogo</option>
+                            <option value="profesional">Profesional</option>
+                            <option value="posgrado">Posgrado</option>
+                        </select>
+
+                        <label class="block text-sm font-medium text-gray-700">¿Tienes experiencia previa en el cuidado de adultos mayores?</label>
+                        <select id="experienciaPrevia" required>
+                            <option value="">Selecciona...</option>
+                            <option value="si">Sí</option>
+                            <option value="no">No</option>
+                        </select>
+
+                        <div id="descripcionExperiencia" class="hidden space-y-4">
+                            <label class="block text-sm font-medium text-gray-700">Describe brevemente tu experiencia más reciente</label>
+                            <textarea id="descripcionExperienciaTexto" rows="3" placeholder="Describe tu experiencia..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Botón de Envío -->
+                    <div class="flex justify-center pt-6">
+                        <button type="submit" class="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-indigo-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            Continuar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Lógica para cargar y gestionar las listas desplegables anidadas
+        document.addEventListener('DOMContentLoaded', () => {
+            const paisSelect = document.getElementById('pais');
+            const departamentoSelect = document.getElementById('departamento');
+            const ciudadSelect = document.getElementById('ciudad');
+            const colombiaFields = document.getElementById('colombiaFields');
+            const otherCountryField = document.getElementById('otherCountryField');
+            const experienciaSelect = document.getElementById('experienciaPrevia');
+            const descripcionExperienciaDiv = document.getElementById('descripcionExperiencia');
+            const fechaDiligenciamientoInput = document.getElementById('fechaDiligenciamiento');
+            const fechaNacimientoInput = document.getElementById('fechaNacimiento');
+            const edadInput = document.getElementById('edad');
+            const ageErrorDiv = document.getElementById('ageError');
+            const restOfFormDiv = document.getElementById('restOfForm');
+
+            // Establece la fecha de diligenciamiento automáticamente
+            const today = new Date().toISOString().slice(0, 10);
+            fechaDiligenciamientoInput.value = today;
+
+            // Función para calcular la edad
+            const calculateAge = () => {
+                const birthDate = new Date(fechaNacimientoInput.value);
+                const todayDate = new Date();
+                
+                if (isNaN(birthDate)) {
+                    edadInput.value = "";
+                    ageErrorDiv.classList.add('hidden');
+                    restOfFormDiv.classList.remove('hidden');
+                    return;
+                }
+
+                let age = todayDate.getFullYear() - birthDate.getFullYear();
+                const monthDifference = todayDate.getMonth() - birthDate.getMonth();
+                const dayDifference = todayDate.getDate() - birthDate.getDate();
+
+                // Ajusta la edad si el cumpleaños no ha pasado aún
+                if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+                    age--;
+                }
+                
+                edadInput.value = age >= 0 ? age : "";
+                
+                // Lógica para mostrar/ocultar el mensaje de error y el resto del formulario
+                if (age < 18) {
+                    ageErrorDiv.classList.remove('hidden');
+                    restOfFormDiv.classList.add('hidden');
+                } else {
+                    ageErrorDiv.classList.add('hidden');
+                    restOfFormDiv.classList.remove('hidden');
+                }
+            };
+
+            // Evento para recalcular la edad al cambiar la fecha de nacimiento
+            fechaNacimientoInput.addEventListener('change', calculateAge);
+
+            // Simula la carga de países desde una API
+            const loadCountries = async () => {
+                // En una implementación real, aquí harías una llamada a una API
+                const countries = [
+                    { id: 'colombia', name: 'Colombia' },
+                    { id: 'mexico', name: 'México' },
+                    { id: 'peru', name: 'Perú' },
+                    { id: 'otro', name: 'Otro' }
+                ];
+                
+                countries.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.id;
+                    option.textContent = country.name;
+                    paisSelect.appendChild(option);
+                });
+            };
+
+            // Simula la carga de departamentos y ciudades desde una API
+            const loadColombiaData = async () => {
+                const colombiaData = {
+                    "Atlantico": ["Barranquilla", "Soledad", "Malambo"],
+                    "Antioquia": ["Medellín", "Bello", "Envigado"],
+                    "Cundinamarca": ["Bogotá D.C.", "Chia", "Soacha"],
+                    "Valle del Cauca": ["Cali", "Palmira", "Buga"]
+                };
+                
+                // Limpiar listas anteriores
+                departamentoSelect.innerHTML = '<option value="">Selecciona tu departamento...</option>';
+                ciudadSelect.innerHTML = '<option value="">Selecciona tu ciudad...</option>';
+
+                Object.keys(colombiaData).forEach(departamento => {
+                    const option = document.createElement('option');
+                    option.value = departamento;
+                    option.textContent = departamento;
+                    departamentoSelect.appendChild(option);
+                });
+
+                departamentoSelect.addEventListener('change', (event) => {
+                    const selectedDepartamento = event.target.value;
+                    ciudadSelect.innerHTML = '<option value="">Selecciona tu ciudad...</option>';
+                    if (selectedDepartamento in colombiaData) {
+                        colombiaData[selectedDepartamento].forEach(ciudad => {
+                            const option = document.createElement('option');
+                            option.value = ciudad;
+                            option.textContent = ciudad;
+                            ciudadSelect.appendChild(option);
+                        });
+                    }
+                });
+            };
+
+            // Evento para mostrar/ocultar campos según la selección de país
+            paisSelect.addEventListener('change', (event) => {
+                const selectedCountry = event.target.value;
+                if (selectedCountry === 'colombia') {
+                    colombiaFields.classList.remove('hidden');
+                    otherCountryField.classList.add('hidden');
+                    loadColombiaData();
+                } else if (selectedCountry === 'otro') {
+                    colombiaFields.classList.add('hidden');
+                    otherCountryField.classList.remove('hidden');
+                } else {
+                    colombiaFields.classList.add('hidden');
+                    otherCountryField.classList.add('hidden');
+                }
+            });
+
+            // Evento para mostrar/ocultar el campo de experiencia
+            experienciaSelect.addEventListener('change', (event) => {
+                if (event.target.value === 'si') {
+                    descripcionExperienciaDiv.classList.remove('hidden');
+                } else {
+                    descripcionExperienciaDiv.classList.add('hidden');
+                }
+            });
+
+            // Llama a la función para cargar los países al iniciar
+            loadCountries();
+
+            // Manejo del formulario para depuración
+            document.getElementById('caracterizacionForm').addEventListener('submit', (event) => {
+                event.preventDefault();
+                console.log('Formulario enviado. (Datos no se guardan aún)');
+                // Aquí iría la lógica para enviar los datos a Firestore
+            });
+        });
+    </script>
+</body>
+</html>
