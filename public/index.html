@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Postulación - T-Asisto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Formulario de Postulación</h1>
+        <p class="text-center text-gray-500 mb-8">Bienvenido al proceso de selección de T-Asistentes.</p>
+
+        <form id="characterizationForm" class="space-y-6">
+
+            <!-- Fecha de Diligenciamiento (Automática) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="submissionDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Diligenciamiento</label>
+                    <input type="text" id="submissionDate" name="submissionDate" readonly class="w-full bg-gray-100 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 cursor-not-allowed">
+                </div>
+            </div>
+
+            <!-- Sección de Ubicación Geográfica -->
+            <div id="locationSection">
+                <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Ubicación Geográfica</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="country" class="block text-sm font-medium text-gray-700 mb-1">País</label>
+                        <select id="country" name="country" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                            <option value="">Cargando países...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="department" class="block text-sm font-medium text-gray-700 mb-1">Departamento / Estado</label>
+                        <select id="department" name="department" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" disabled required>
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="city" class="block text-sm font-medium text-gray-700 mb-1">Ciudad / Municipio</label>
+                        <select id="city" name="city" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" disabled required>
+                            <option value="">Seleccione...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resto del formulario (inicialmente oculto) -->
+            <div id="mainFormContent" class="space-y-6">
+                <!-- Información de Contacto -->
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Información de Contacto</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
+                            <input type="text" id="fullName" name="fullName" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        </div>
+                        <div>
+                            <label for="idNumber" class="block text-sm font-medium text-gray-700 mb-1">Número de Identificación</label>
+                            <input type="text" id="idNumber" name="idNumber" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
+                            <input type="email" id="email" name="email" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Número de Teléfono</label>
+                            <input type="tel" id="phone" name="phone" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        </div>
+                        <div>
+                            <label for="birthDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Nacimiento</label>
+                            <input type="date" id="birthDate" name="birthDate" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                        </div>
+                        <div>
+                            <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Edad</label>
+                            <input type="text" id="age" name="age" readonly class="w-full bg-gray-100 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 cursor-not-allowed">
+                        </div>
+                    </div>
+                     <div id="ageAlert" class="hidden mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                        No cumples con la edad mínima (18 años) para continuar con el proceso.
+                    </div>
+                </div>
+                
+                <!-- Educación y Experiencia -->
+                <div id="experienceSection">
+                    <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Educación y Experiencia</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                             <label for="educationLevel" class="block text-sm font-medium text-gray-700 mb-1">Nivel de Estudios</label>
+                            <select id="educationLevel" name="educationLevel" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Bachiller">Bachiller</option>
+                                <option value="Técnico">Técnico</option>
+                                <option value="Tecnólogo">Tecnólogo</option>
+                                <option value="Profesional">Profesional</option>
+                                <option value="Posgrado">Posgrado</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">¿Experiencia con adultos mayores?</label>
+                            <div class="flex items-center space-x-4 mt-2">
+                                <label><input type="radio" name="hasExperience" value="si" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"> Sí</label>
+                                <label><input type="radio" name="hasExperience" value="no" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"> No</label>
+                            </div>
+                        </div>
+                         <div class="md:col-span-2">
+                            <label for="lastExperience" class="block text-sm font-medium text-gray-700 mb-1">Describe tu experiencia laboral más reciente</label>
+                            <textarea id="lastExperience" name="lastExperience" rows="3" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disponibilidad -->
+                <div id="availabilitySection">
+                    <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Disponibilidad</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="timeDedication" class="block text-sm font-medium text-gray-700 mb-1">Tiempo de dedicación</label>
+                             <select id="timeDedication" name="timeDedication" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                                <option value="">Seleccione...</option>
+                                <option value="2-4 horas">2 a 4 horas al día</option>
+                                <option value="4-6 horas">4 a 6 horas al día</option>
+                                <option value="8 horas">8 horas al día</option>
+                            </select>
+                        </div>
+                         <div>
+                            <label for="daysAvailable" class="block text-sm font-medium text-gray-700 mb-1">Días disponibles</label>
+                             <select id="daysAvailable" name="daysAvailable" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                                <option value="">Seleccione...</option>
+                                <option value="1">1 día a la semana</option>
+                                <option value="2">2 días a la semana</option>
+                                <option value="3">3 días a la semana</option>
+                                <option value="4">4 días a la semana</option>
+                                <option value="5">5 días a la semana</option>
+                                <option value="fines de semana">Solo fines de semana</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Botón de envío -->
+                <div class="flex justify-end pt-4">
+                    <button type="submit" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300">
+                        Continuar
+                    </button>
+                </div>
+                <div id="successMessage" class="hidden mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                    ¡Información guardada con éxito! Serás redirigido a la siguiente etapa.
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // --- CONFIGURACIÓN DE FIREBASE ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let app, auth, db, userId;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            setLogLevel('debug'); 
+
+            if (initialAuthToken) {
+                await signInWithCustomToken(auth, initialAuthToken);
+            } else {
+                await signInAnonymously(auth);
+            }
+            userId = auth.currentUser?.uid;
+            console.log("Usuario autenticado. UID:", userId);
+
+        } catch (error) {
+            console.error("Error al inicializar Firebase:", error);
+        }
+
+        // --- LÓGICA DEL FORMULARIO ---
+        let geoData = {}; // Objeto vacío para almacenar los datos geográficos
+
+        const form = document.getElementById('characterizationForm');
+        const mainFormContent = document.getElementById('mainFormContent');
+        
+        const submissionDateInput = document.getElementById('submissionDate');
+        const birthDateInput = document.getElementById('birthDate');
+        const ageInput = document.getElementById('age');
+        const ageAlert = document.getElementById('ageAlert');
+        const experienceSection = document.getElementById('experienceSection');
+        const availabilitySection = document.getElementById('availabilitySection');
+        const continueButton = form.querySelector('button[type="submit"]');
+
+        const countrySelect = document.getElementById('country');
+        const departmentSelect = document.getElementById('department');
+        const citySelect = document.getElementById('city');
+
+        // --- Carga dinámica de datos geográficos ---
+        async function loadGeoData() {
+            try {
+                // Como index.html y geodata.json están ahora en la misma carpeta (public),
+                // podemos llamarlo directamente por su nombre.
+                const response = await fetch('geodata.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                geoData = await response.json();
+                populateCountries();
+            } catch (error) {
+                console.error("No se pudieron cargar los datos geográficos:", error);
+                countrySelect.innerHTML = '<option value="">Error al cargar países</option>';
+            }
+        }
+        
+        function populateCountries() {
+            countrySelect.innerHTML = '<option value="">Seleccione un país</option>'; // Limpiar
+            const regions = Object.keys(geoData);
+            regions.forEach(region => {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = region;
+                Object.keys(geoData[region]).forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country;
+                    option.textContent = country;
+                    optgroup.appendChild(option);
+                });
+                countrySelect.appendChild(optgroup);
+            });
+        }
+
+
+        const populateSelect = (selectElement, items) => {
+            selectElement.innerHTML = `<option value="">Seleccione...</option>`;
+            items.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                option.textContent = item;
+                selectElement.appendChild(option);
+            });
+        };
+        
+        countrySelect.addEventListener('change', () => {
+            const selectedCountry = countrySelect.value;
+            departmentSelect.disabled = true;
+            citySelect.disabled = true;
+            departmentSelect.innerHTML = '<option value="">Seleccione...</option>';
+            citySelect.innerHTML = '<option value="">Seleccione...</option>';
+
+            if (selectedCountry) {
+                let countryData;
+                for (const region in geoData) {
+                    if (geoData[region][selectedCountry]) {
+                        countryData = geoData[region][selectedCountry];
+                        break;
+                    }
+                }
+                if (countryData) {
+                    populateSelect(departmentSelect, Object.keys(countryData));
+                    departmentSelect.disabled = false;
+                }
+            }
+        });
+
+        departmentSelect.addEventListener('change', () => {
+            const selectedCountry = countrySelect.value;
+            const selectedDepartment = departmentSelect.value;
+            citySelect.disabled = true;
+            citySelect.innerHTML = '<option value="">Seleccione...</option>';
+            
+            if (selectedDepartment) {
+                 let countryData;
+                for (const region in geoData) {
+                    if (geoData[region][selectedCountry]) {
+                        countryData = geoData[region][selectedCountry];
+                        break;
+                    }
+                }
+                if (countryData && countryData[selectedDepartment]) {
+                    populateSelect(citySelect, countryData[selectedDepartment]);
+                    citySelect.disabled = false;
+                }
+            }
+        });
+        
+        const setSubmissionDate = () => {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            submissionDateInput.value = `${year}-${month}-${day}`;
+        };
+
+        const calculateAge = () => {
+            if (!birthDateInput.value) return;
+
+            const birthDate = new Date(birthDateInput.value);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            ageInput.value = age;
+            validateAge(age);
+        };
+
+        const validateAge = (age) => {
+            if (age < 18) {
+                ageAlert.classList.remove('hidden');
+                experienceSection.classList.add('hidden');
+                availabilitySection.classList.add('hidden');
+                continueButton.classList.add('hidden');
+            } else {
+                ageAlert.classList.add('hidden');
+                experienceSection.classList.remove('hidden');
+                availabilitySection.classList.remove('hidden');
+                continueButton.classList.remove('hidden');
+            }
+        };
+
+        birthDateInput.addEventListener('change', calculateAge);
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!userId) {
+                console.error("No hay un usuario autenticado para guardar los datos.");
+                alert("Error de autenticación. Por favor, recargue la página.");
+                return;
+            }
+
+            const formData = new FormData(form);
+            const candidateData = Object.fromEntries(formData.entries());
+            candidateData.age = ageInput.value; 
+            candidateData.submissionTimestamp = new Date();
+
+            console.log("Guardando datos del candidato:", candidateData);
+            
+            try {
+                const collectionPath = `artifacts/${appId}/users/${userId}/candidatos`;
+                const docRef = await addDoc(collection(db, collectionPath), candidateData);
+                console.log("Documento escrito con ID: ", docRef.id);
+                
+                document.getElementById('successMessage').classList.remove('hidden');
+                form.reset();
+                
+            } catch (error) {
+                console.error("Error al añadir el documento: ", error);
+                alert("Hubo un error al guardar tu información. Por favor, inténtalo de nuevo.");
+            }
+        });
+        
+        window.onload = () => {
+            setSubmissionDate();
+            mainFormContent.classList.remove('hidden');
+            loadGeoData(); // Cargar los datos geográficos cuando la página esté lista
+        };
+    </script>
+</body>
+</html>
+
+
+
