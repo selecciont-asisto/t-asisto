@@ -7,24 +7,28 @@ export default async function handler(req, res) {
 
   try {
     const db = admin.firestore();
-    // 1. Obtenemos los candidatos sin ordenar desde Firestore.
     const snapshot = await db.collection('candidates').get();
 
     if (snapshot.empty) {
       return res.status(200).json([]);
     }
 
-    const candidatos = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-
-    // 2. Ordenamos los candidatos por fecha en el servidor usando JavaScript.
-    candidatos.sort((a, b) => {
-      const dateA = a.serverTimestamp.toDate();
-      const dateB = b.serverTimestamp.toDate();
-      return dateB - dateA; // Orden descendente (más nuevos primero)
+    const candidatos = snapshot.docs.map(doc => {
+      const data = doc.data();
+      // Si el timestamp no existe o no es objeto Timestamp, asigna 0
+      let submissionTimestampMs = 0;
+      if (data.serverTimestamp && typeof data.serverTimestamp.toDate === "function") {
+        submissionTimestampMs = data.serverTimestamp.toDate().getTime();
+      }
+      return {
+        id: doc.id,
+        ...data,
+        submissionTimestamp: submissionTimestampMs
+      };
     });
+
+    // Ordena descendente por la fecha en milisegundos
+    candidatos.sort((a, b) => b.submissionTimestamp - a.submissionTimestamp);
 
     res.status(200).json(candidatos);
 
@@ -33,4 +37,3 @@ export default async function handler(req, res) {
     res.status(500).json({ message: 'Error interno del servidor.' });
   }
 }
-
