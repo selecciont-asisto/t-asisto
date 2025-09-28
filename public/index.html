@@ -29,7 +29,7 @@
                 <!-- Fecha de Diligenciamiento (Automática) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="submissionDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Dilenciamiento</label>
+                        <label for="submissionDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Diligenciamiento</label>
                         <input type="text" id="submissionDate" name="submissionDate" readonly class="w-full bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 cursor-not-allowed px-3 py-2">
                     </div>
                 </div>
@@ -178,7 +178,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firestore.js";
+        import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         // --- CONFIGURACIÓN DE FIREBASE ---
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
