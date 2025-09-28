@@ -1,36 +1,34 @@
 import admin from 'firebase-admin';
 
-// Check if the app is already initialized to prevent errors
+// Revisa si la app ya está inicializada para prevenir errores
 if (!admin.apps.length) {
   try {
-    // 1. Read the Base64 encoded string from Vercel's environment variables
+    // Lee la variable de entorno Base64 de Vercel
     const serviceAccountBase64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
 
     if (!serviceAccountBase64) {
-      throw new Error('Firebase service account key is not set in environment variables.');
+      throw new Error('La clave de la cuenta de servicio de Firebase no está configurada en las variables de entorno.');
     }
 
-    // 2. Decode the Base64 string back to the original JSON string
+    // Decodifica la cadena Base64 al JSON original
     const serviceAccountJson = Buffer.from(serviceAccountBase64, 'base64').toString('utf8');
     
-    // 3. Parse the JSON string into a JavaScript object
+    // Parsea la cadena JSON a un objeto de JavaScript
     const serviceAccount = JSON.parse(serviceAccountJson);
 
-    // 4. Initialize the Firebase Admin SDK with the decoded credentials
+    // Inicializa el SDK de Firebase Admin con las credenciales decodificadas
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount)
     });
 
-    console.log("Firebase Admin SDK initialized successfully.");
+    console.log("Firebase Admin SDK inicializado correctamente.");
 
   } catch (error) {
-    console.error("Error initializing Firebase Admin SDK:", error);
-    // Exit the process if Firebase Admin fails to initialize,
-    // as it's critical for the backend functions.
+    console.error("Error inicializando Firebase Admin SDK:", error);
     process.exit(1);
   }
 }
 
-// Export the initialized admin instance for use in other API routes
+// Exporta la instancia de admin para usarla en otras rutas de la API
 export default admin;
 
