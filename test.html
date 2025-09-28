@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Psicométrica - T-Asisto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .question-card {
+            border-left: 4px solid #4f46e5; /* Indigo color */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
+        
+        <div class="flex justify-center mb-6">
+            <img src="Logoprincipal.jpg" alt="Logo T-Asisto" class="h-20 w-auto">
+        </div>
+
+        <div id="testContainer">
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Prueba Psicométrica</h1>
+            <p class="text-center text-gray-500 mb-8">Responda a cada pregunta eligiendo la opción que mejor se ajuste a su manera de ser o actuar en la situación descrita.</p>
+
+            <form id="psychometricTestForm" class="space-y-8">
+                <!-- Las preguntas se cargarán aquí desde el JSON -->
+            </form>
+        </div>
+
+        <div id="resultContainer" class="hidden text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Prueba Finalizada</h2>
+            <p id="finalMessage" class="p-4 rounded-lg"></p>
+            <div id="nextStepContainer" class="hidden mt-6">
+                <a href="questions.html" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 transition-colors duration-300">
+                    Continuar a la siguiente etapa
+                </a>
+           </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // --- CONFIGURACIÓN DE FIREBASE ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let app, auth, db, userId;
+
+        const testData = {
+            "preguntas": [
+                { "id": 1, "pregunta": "¿Cuál de estas frases describe mejor tu motivación para ayudar a los demás?", "opciones": [{ "respuesta": "Me siento feliz y realizado cuando mi ayuda es valiosa y viene de un lugar donde yo también me siento bien.", "puntuacion": 1 }, { "respuesta": "Ayudar a los demás es mi deber, incluso si a veces me agota o me quita tiempo para mí.", "puntuacion": -1 }, { "respuesta": "Ayudo esperando que luego las personas me retribuyan el favor de alguna manera.", "puntuacion": -1 }, { "respuesta": "Ayudo solo si la tarea es sencilla y no me implica mucho esfuerzo.", "puntuacion": -1 }] },
+                { "id": 2, "pregunta": "Un adulto mayor te dice: 'Me siento muy torpe, se me cae todo de las manos. ¡Es inútil intentar hacer esto!'. ¿Qué le responderías?", "opciones": [{ "respuesta": "Le dirías: 'No se preocupe, es normal sentirse así a su edad, no es su culpa'.", "puntuacion": -1 }, { "respuesta": "Le animarías: 'No es tan complicado, con un poco de práctica lo logrará fácilmente'.", "puntuacion": -1 }, { "respuesta": "Le preguntarías: 'Entiendo que se sienta así. ¿Qué cree que necesitaría para que esto le resulte un poco menos desafiante o para que lo intente de otra manera?'", "puntuacion": 1 }, { "respuesta": "Le dirías: 'Sí, a veces las cosas son difíciles, pero debe esforzarse'.", "puntuacion": -1 }] },
+                { "id": 3, "pregunta": "Tienes un compromiso personal importante, pero el adulto mayor te pide que hagas una diligencia urgente que te tomaría todo el tiempo. ¿Cómo manejarías la situación?", "opciones": [{ "respuesta": "Cancelarías tu compromiso personal, porque el adulto mayor es tu prioridad.", "puntuacion": -1 }, { "respuesta": "Le dirías que no puedes ir y que debe buscar a otra persona o esperar.", "puntuacion": -1 }, { "respuesta": "Con respeto, le explicarías que tienes un compromiso importante que no puedes cambiar, y le ayudarías a buscar otra solución o momento para la diligencia.", "puntuacion": 1 }, { "respuesta": "Harías la diligencia de mala gana y luego te quejarías con tus amigos sobre lo exigente que es.", "puntuacion": -1 }] },
+                { "id": 4, "pregunta": "Un adulto mayor, que está postrado en cama, te comenta: 'Mi vida ya no tiene sentido, no puedo hacer nada de lo que me gustaba'. ¿Cómo lo guiarías?", "opciones": [{ "respuesta": "Le dirías: 'Claro que sí, ¡hay muchas cosas que aún puede hacer!'.", "puntuacion": -1 }, { "respuesta": "Lo animarías a enfocarse en sus recuerdos felices para que no se sienta mal.", "puntuacion": -1 }, { "respuesta": "Le preguntarías: 'A pesar de sus limitaciones físicas, ¿qué cosas dentro de usted, como sus pensamientos, sus ideas, su actitud o sus afectos, aún puede elegir y controlar para darle un nuevo sentido a su día a día?'", "puntuacion": 1 }, { "respuesta": "Le sugerirías que vea más televisión o escuche música para distraerse y no pensar en ello.", "puntuacion": -1 }] },
+                { "id": 5, "pregunta": "Estás a punto de iniciar el acompañamiento con un adulto mayor. ¿Qué te parece lo más importante establecer en su primera conversación?", "opciones": [{ "respuesta": "Una lista detallada de todas las prohibiciones y lo que el adulto mayor no debe hacer.", "puntuacion": -1 }, { "respuesta": "Asegurarle que este es un espacio completamente seguro, donde puede expresarse libremente, sin que haya juicios o críticas sobre lo que diga o sienta.", "puntuacion": 1 }, { "respuesta": "Explicarle que no eres un juez y que no te importa lo que haya hecho en el pasado.", "puntuacion": -1 }, { "respuesta": "Definir quién tiene el control y la última palabra en las decisiones diarias.", "puntuacion": -1 }] },
+                { "id": 6, "pregunta": "Un familiar del adulto mayor tiene una idea muy diferente a la tuya sobre cómo ayudarlo, y la discusión se vuelve tensa. ¿Cómo buscarías resolver esta diferencia?", "opciones": [{ "respuesta": "Intentarías convencerlos de que tu idea es la 'buena' y la suya es la 'mala'.", "puntuacion": -1 }, { "respuesta": "Te enfocarías en entender qué es lo más importante para cada uno (sus 'intereses'), más allá de la idea específica que están defendiendo, para encontrar una solución que beneficie a todos.", "puntuacion": 1 }, { "respuesta": "Pondrías fin a la discusión y harías lo que consideres 'correcto' sin su opinión.", "puntuacion": -1 }, { "respuesta": "Dejarías que el familiar tome la decisión para evitar el conflicto, incluso si no estás de acuerdo.", "puntuacion": -1 }] },
+                { "id": 7, "pregunta": "Si el adulto mayor te pide realizar una tarea que sabes que podría hacer por sí mismo con un poco de guía, ¿qué harías, teniendo en cuenta la idea de fomentar su autonomía?", "opciones": [{ "respuesta": "Lo harías por él para ahorrar tiempo y evitar que se frustre.", "puntuacion": -1 }, { "respuesta": "Le dirías 'no, usted puede hacerlo solo' sin más explicaciones.", "puntuacion": -1 }, { "respuesta": "Le preguntarías: '¿Qué parte de la tarea se le hace más compleja o dónde siente que necesita un apoyo para que usted pueda hacerlo?'", "puntuacion": 1 }, { "respuesta": "Le dirías que si no lo hace, no podrás seguir ayudándole en otras cosas.", "puntuacion": -1 }] },
+                { "id": 8, "pregunta": "Imagina que el adulto mayor está pasando por un momento de gran tristeza y te dice: 'No sé para qué sigo aquí, ya no encuentro ningún sentido a mi vida'. ¿Cuál sería tu enfoque para ayudarle?", "opciones": [{ "respuesta": "Le dirías que no se preocupe, que la tristeza pasará pronto y que debe ser fuerte.", "puntuacion": -1 }, { "respuesta": "Le ayudarías a recordar momentos felices del pasado para que se sienta mejor.", "puntuacion": -1 }, { "respuesta": "Le escucharías activamente, validando su sentimiento, y luego le preguntarías si hay algo, por pequeño que sea, que aún le dé una chispa de interés o una razón para continuar.", "puntuacion": 1 }, { "respuesta": "Le sugerirías visitar a un familiar o amigo para que lo animen.", "puntuacion": -1 }] },
+                { "id": 9, "pregunta": "Tienes un plan de actividades bien organizado para el adulto mayor, pero un día él se siente mal anímicamente y no quiere hacer nada. ¿Cómo adaptarías tu 'proyecto' de ese día?", "opciones": [{ "respuesta": "Insistirías en seguir el plan, porque la estructura es importante para la disciplina.", "puntuacion": -1 }, { "respuesta": "Cancelarías todas las actividades y te irías, ya que no se puede trabajar así.", "puntuacion": -1 }, { "respuesta": "Buscarías entender qué le sucede y adaptarías el plan a su estado anímico, quizás posponiendo algunas cosas o cambiando a actividades más tranquilas y reconfortantes.", "puntuacion": 1 }, { "respuesta": "Le dirías que está 'mal' no querer hacer nada y que debe esforzarse para seguir el plan.", "puntuacion": -1 }] },
+                { "id": 10, "pregunta": "Si tu propósito general en la vida fuera 'ayudar a las personas a encontrar su propia felicidad y bienestar', ¿cómo se vería eso reflejado en tu día a día como acompañante?", "opciones": [{ "respuesta": "Me enfocaría en hacer todo por el adulto mayor para que no tenga preocupaciones.", "puntuacion": -1 }, { "respuesta": "Priorizaría su seguridad y comodidad, sin preocuparme mucho por su estado emocional o sus metas personales a largo plazo.", "puntuacion": -1 }, { "respuesta": "Ayudaría al adulto mayor a identificar lo que le hace feliz, lo que le da propósito, y lo apoyaría en pequeños proyectos o actividades que le permitan vivir con más plenitud, siempre cuidando mi propio bienestar.", "puntuacion": 1 }, { "respuesta": "Les daría consejos y les diría lo que deben hacer para ser felices.", "puntuacion": -1 }] },
+                { "id": 11, "pregunta": "Mientras caminan, el adulto mayor se mueve muy lentamente y te estás retrasando para la siguiente actividad. ¿Qué haces?", "opciones": [{ "respuesta": "Le digo que necesitamos apurarnos o no llegaremos a tiempo.", "puntuacion": -1 }, { "respuesta": "Me adapto a su ritmo con paciencia, entendiendo que su bienestar es más importante que el horario.", "puntuacion": 1 }, { "respuesta": "Busco un atajo o una forma de hacer la tarea por él para acelerar el proceso.", "puntuacion": -1 }, { "respuesta": "Muestro mi frustración con gestos o suspiros para que entienda que vamos tarde.", "puntuacion": -1 }] },
+                { "id": 12, "pregunta": "El adulto mayor no encuentra sus gafas y acusa, sin pruebas, a una persona de la limpieza de habérselas robado. ¿Cómo reaccionas?", "opciones": [{ "respuesta": "Le digo inmediatamente que está equivocado y que no debería acusar a la gente.", "puntuacion": -1 }, { "respuesta": "Ignoro el comentario para no generar un problema mayor.", "puntuacion": -1 }, { "respuesta": "Valido su preocupación por el objeto perdido y le digo: 'Entiendo que esté preocupado. ¿Por qué no buscamos juntos con calma antes de pensar en otra cosa?'", "puntuacion": 1 }, { "respuesta": "Confronto a la persona de la limpieza para preguntarle sobre las gafas.", "puntuacion": -1 }] },
+                { "id": 13, "pregunta": "Como agradecimiento, la familia del adulto mayor te ofrece un regalo costoso. ¿Qué haces?", "opciones": [{ "respuesta": "Lo acepto felizmente, me lo he ganado con mi trabajo.", "puntuacion": -1 }, { "respuesta": "Lo rechazo de forma tajante para que entiendan que no es correcto.", "puntuacion": -1 }, { "respuesta": "Agradezco enormemente el gesto, pero explico amablemente que las políticas de mi trabajo no me permiten aceptar regalos, asegurándoles que su confianza es el mejor agradecimiento.", "puntuacion": 1 }, { "respuesta": "Acepto el regalo, pero no se lo comento a nadie de la empresa.", "puntuacion": -1 }] },
+                { "id": 14, "pregunta": "Notas que el adulto mayor ha perdido interés en actividades que antes disfrutaba y parece más apático. ¿Cuál es tu estrategia?", "opciones": [{ "respuesta": "Sigo con la rutina establecida, pensando que es solo una fase temporal.", "puntuacion": -1 }, { "respuesta": "Le digo que tiene que poner más de su parte para sentirse mejor.", "puntuacion": -1 }, { "respuesta": "Inicio una conversación casual sobre cosas que le gustaban en el pasado, para ver si alguna despierta su interés y proponer una actividad simple relacionada con ello.", "puntuacion": 1 }, { "respuesta": "Le pongo la televisión todo el día para que al menos esté entretenido.", "puntuacion": -1 }] },
+                { "id": 15, "pregunta": "El adulto mayor tropieza y sufre una caída leve en casa. No parece herido, pero está muy asustado y avergonzado. ¿Qué es lo primero que haces?", "opciones": [{ "respuesta": "Le digo: '¡No pasó nada, levántese rápido que no es para tanto!'.", "puntuacion": -1 }, { "respuesta": "Entro en pánico y empiezo a gritar pidiendo ayuda, aumentando su ansiedad.", "puntuacion": -1 }, { "respuesta": "Me arrodillo a su lado, mantengo la calma, le pregunto si siente algún dolor y lo tranquilizo antes de ayudarlo a levantarse de forma segura.", "puntuacion": 1 }, { "respuesta": "Lo levanto rápidamente sin preguntarle cómo se siente.", "puntuacion": -1 }] },
+                { "id": 16, "pregunta": "En el supermercado, el cajero te da 10 dólares de más en el cambio por error. El adulto mayor que acompañas no se da cuenta. ¿Qué haces?", "opciones": [{ "respuesta": "Me guardo el dinero. Nadie se dio cuenta, así que no es un problema.", "puntuacion": -1 }, { "respuesta": "Le doy el dinero extra al adulto mayor para que se ponga contento.", "puntuacion": -1 }, { "respuesta": "Inmediatamente le digo al cajero sobre el error y le devuelvo el dinero.", "puntuacion": 1 }, { "respuesta": "Espero a salir de la tienda para decidir qué hacer con el dinero.", "puntuacion": -1 }] },
+                { "id": 17, "pregunta": "Están jugando a las cartas y el adulto mayor insiste en aplicar una regla que no existe para poder ganar. ¿Cómo lo manejas?", "opciones": [{ "respuesta": "Le explico firmemente que esa no es la regla y que debe jugar correctamente.", "puntuacion": -1 }, { "respuesta": "Lo acuso de hacer trampa y me niego a seguir jugando.", "puntuacion": -1 }, { "respuesta": "Sonrío y acepto su regla, entendiendo que el objetivo es la diversión y la conexión, no la competencia.", "puntuacion": 1 }, { "respuesta": "Dejo que gane esa ronda pero luego impongo las reglas correctas para las siguientes.", "puntuacion": -1 }] },
+                { "id": 18, "pregunta": "Durante dos días seguidos, notas que el adulto mayor apenas toca su comida favorita. ¿Qué acción tomas?", "opciones": [{ "respuesta": "No le doy importancia, ya comerá cuando tenga hambre.", "puntuacion": -1 }, { "respuesta": "Insisto y trato de obligarlo a comer un poco más.", "puntuacion": -1 }, { "respuesta": "Le pregunto con amabilidad si hay algo que le moleste o si la comida no le apetece, y comunico esta novedad a su familia o al supervisor.", "puntuacion": 1 }, { "respuesta": "Le ofrezco postre o dulces en lugar de la comida para asegurarme de que coma algo.", "puntuacion": -1 }] },
+                { "id": 19, "pregunta": "El adulto mayor, sin mala intención, hace un comentario desafortunado sobre tu ropa. ¿Cómo te afecta?", "opciones": [{ "respuesta": "Me ofendo y me muestro distante y frío con él el resto del día.", "puntuacion": -1 }, { "respuesta": "Le respondo con una crítica sobre su propia apariencia.", "puntuacion": -1 }, { "respuesta": "Asumo que no tuvo mala intención, lo dejo pasar sin darle importancia y continúo mi trabajo con la misma amabilidad.", "puntuacion": 1 }, { "respuesta": "Le explico detalladamente por qué su comentario fue inapropiado y le pido que no lo vuelva a hacer.", "puntuacion": -1 }] },
+                { "id": 20, "pregunta": "¿Qué significa para ti 'tener éxito' en este puesto de trabajo?", "opciones": [{ "respuesta": "Cumplir con todas las tareas asignadas en mi horario sin recibir quejas.", "puntuacion": -1 }, { "respuesta": "Convertirme en la persona de confianza indispensable para el adulto mayor.", "puntuacion": -1 }, { "respuesta": "Lograr que, gracias a mi apoyo, el adulto mayor se sienta un poco más autónomo, seguro y animado en su día a día.", "puntuacion": 1 }, { "respuesta": "Asegurarme de que la familia esté siempre contenta con mi desempeño.", "puntuacion": -1 }] }
+            ]
+        };
+
+        const baremo = [
+            { "rango_puntuacion": [14, 20], "evaluacion": "Apto", "mensaje": "Gracias por completar la prueba. Hemos registrado tus respuestas y nos pondremos en contacto contigo pronto para los siguientes pasos." },
+            { "rango_puntuacion": [6, 13], "evaluacion": "Apto con reservas", "mensaje": "Gracias por completar la prueba. Hemos registrado tus respuestas y tu postulación será revisada por nuestro equipo." },
+            { "rango_puntuacion": [-20, 5], "evaluacion": "No apto", "mensaje": "Agradecemos tu interés en formar parte de T-Asisto. En esta ocasión, tu perfil no se ajusta completamente a los requisitos del puesto. Te deseamos mucho éxito en tu búsqueda." }
+        ];
+
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            setLogLevel('debug');
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                } else {
+                     if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    userId = auth.currentUser?.uid;
+                }
+                console.log("Usuario autenticado. UID:", userId);
+            });
+        } catch (error) {
+            console.error("Error al inicializar Firebase:", error);
+        }
+
+        const form = document.getElementById('psychometricTestForm');
+        const testContainer = document.getElementById('testContainer');
+        const resultContainer = document.getElementById('resultContainer');
+        const finalMessageEl = document.getElementById('finalMessage');
+        const nextStepContainer = document.getElementById('nextStepContainer');
+        
+        function loadQuestions() {
+            let questionsHTML = '';
+            testData.preguntas.forEach((q) => {
+                questionsHTML += `
+                    <div class="question-card bg-gray-50 p-6 rounded-lg">
+                        <p class="font-semibold text-gray-800 mb-4">${q.id}. ${q.pregunta}</p>
+                        <div class="space-y-3">
+                `;
+                q.opciones.forEach((opt) => {
+                    questionsHTML += `
+                        <label class="p-4 rounded-lg border border-gray-300 hover:bg-indigo-50 cursor-pointer transition-all duration-200 block">
+                            <input type="radio" name="q${q.id}" value="${opt.puntuacion}" class="sr-only" required>
+                            <span class="font-medium text-gray-700">${opt.respuesta}</span>
+                        </label>
+                    `;
+                });
+                questionsHTML += `</div></div>`;
+            });
+             questionsHTML += `
+                <div class="flex justify-end pt-4">
+                    <button type="submit" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300">
+                        Finalizar Prueba
+                    </button>
+                </div>`;
+            form.innerHTML = questionsHTML;
+        }
+        
+        loadQuestions();
+
+        form.addEventListener('change', (e) => {
+            if (e.target.type === 'radio') {
+                const questionName = e.target.name;
+                document.querySelectorAll(`input[name="${questionName}"]`).forEach(radio => {
+                    const label = radio.parentElement;
+                    label.classList.remove('border-indigo-600', 'bg-indigo-50', 'ring-2', 'ring-indigo-500');
+                    label.classList.add('border-gray-300');
+                });
+                const selectedLabel = e.target.parentElement;
+                selectedLabel.classList.remove('border-gray-300');
+                selectedLabel.classList.add('border-indigo-600', 'bg-indigo-50', 'ring-2', 'ring-indigo-500');
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!userId) {
+                console.error("No hay un usuario autenticado para guardar los datos.");
+                alert("Error de autenticación. Por favor, recargue la página.");
+                return;
+            }
+
+            const formData = new FormData(form);
+            const answers = {};
+            let totalScore = 0;
+            
+            if (Object.keys(Object.fromEntries(formData)).length < testData.preguntas.length) {
+                alert('Por favor, responde todas las preguntas antes de finalizar la prueba.');
+                return;
+            }
+
+            for (const [key, value] of formData.entries()) {
+                answers[key] = value;
+                totalScore += parseInt(value, 10);
+            }
+            
+            let resultEvaluation = "No evaluado";
+            let finalMessage = "Error al procesar el resultado.";
+
+            for (const level of baremo) {
+                const [min, max] = level.rango_puntuacion;
+                if (totalScore >= min && totalScore <= max) {
+                    resultEvaluation = level.evaluacion;
+                    finalMessage = level.mensaje;
+                    break;
+                }
+            }
+            
+            const finalResults = {
+                answers,
+                score: totalScore,
+                evaluation: resultEvaluation,
+                submissionTimestamp: new Date()
+            };
+
+            console.log("Guardando resultados finales:", finalResults);
+            
+            try {
+                const collectionPath = `artifacts/${appId}/users/${userId}/psychometric_tests`;
+                const docRef = await addDoc(collection(db, collectionPath), finalResults);
+                console.log("Resultados guardados con ID: ", docRef.id);
+                
+                testContainer.classList.add('hidden');
+                resultContainer.classList.remove('hidden');
+                finalMessageEl.textContent = finalMessage;
+
+                if (resultEvaluation === "No apto") {
+                    finalMessageEl.className = 'p-4 rounded-lg bg-yellow-100 border border-yellow-400 text-yellow-700';
+                } else {
+                    finalMessageEl.className = 'p-4 rounded-lg bg-green-100 border border-green-400 text-green-700';
+                    nextStepContainer.classList.remove('hidden');
+                }
+
+            } catch (error) {
+                console.error("Error al guardar los resultados: ", error);
+                alert("Hubo un error al guardar tus respuestas. Por favor, inténtalo de nuevo.");
+            }
+        });
+    </script>
+</body>
+</html>
+
