@@ -49,7 +49,7 @@
                     // Creamos la "llave" de sesión para el portal de selección
                     sessionStorage.setItem('selectionAuth', 'true');
                     // Redirigimos al portal principal
-                    window.location.href = 'portal-seleccionados.html';
+                    window.location.href = 'portal-candidatos.html';
                 } else {
                     errorMessage.textContent = result.message || 'Contraseña incorrecta.';
                     errorMessage.classList.remove('hidden');
