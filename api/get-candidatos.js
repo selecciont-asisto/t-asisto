@@ -7,7 +7,8 @@ export default async function handler(req, res) {
 
   try {
     const db = admin.firestore();
-    const snapshot = await db.collection('candidates').orderBy('serverTimestamp', 'desc').get();
+    // 1. Obtenemos los candidatos sin ordenar desde Firestore.
+    const snapshot = await db.collection('candidates').get();
 
     if (snapshot.empty) {
       return res.status(200).json([]);
@@ -18,6 +19,13 @@ export default async function handler(req, res) {
       ...doc.data()
     }));
 
+    // 2. Ordenamos los candidatos por fecha en el servidor usando JavaScript.
+    candidatos.sort((a, b) => {
+      const dateA = a.serverTimestamp.toDate();
+      const dateB = b.serverTimestamp.toDate();
+      return dateB - dateA; // Orden descendente (más nuevos primero)
+    });
+
     res.status(200).json(candidatos);
 
   } catch (error) {
@@ -25,3 +33,4 @@ export default async function handler(req, res) {
     res.status(500).json({ message: 'Error interno del servidor.' });
   }
 }
+
