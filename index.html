@@ -186,7 +186,28 @@
                 </a>
            </div>
         </div>
+
+        <footer class="text-center mt-8 pt-6 border-t border-gray-200 text-sm text-gray-500">
+            <p>
+                T-Asisto @2025. Proceso de selección creado por 
+                <a href="https://www.caminosdelser.co" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline">Caminos del Ser</a>. 
+                Todos los derechos reservados.
+            </p>
+            <p class="mt-1">
+                <a href="#" class="hover:underline">Revisa nuestra política de privacidad</a> | 
+                <a href="login-seleccionados.html" class="hover:underline">Seleccionados</a>
+            </p>
+        </footer>
     </div>
+
+    <!-- Banner de Cookies -->
+    <div id="cookie-banner" class="hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center shadow-lg z-50">
+        <p class="text-sm text-center sm:text-left mb-2 sm:mb-0">Utilizamos cookies para asegurar que damos la mejor experiencia al usuario en nuestra web. Si sigues utilizando este sitio asumiremos que estás de acuerdo.</p>
+        <button id="accept-cookies" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors duration-300 flex-shrink-0">
+            Aceptar
+        </button>
+    </div>
+
 
     <script type="module">
         // --- LÓGICA DEL FORMULARIO ---
@@ -377,6 +398,19 @@
         function initializePage() {
             setSubmissionDate();
             loadGeoData();
+
+            // Lógica del banner de cookies
+            const cookieBanner = document.getElementById('cookie-banner');
+            const acceptCookiesButton = document.getElementById('accept-cookies');
+
+            if (!localStorage.getItem('cookiesAccepted')) {
+                cookieBanner.classList.remove('hidden');
+            }
+
+            acceptCookiesButton.addEventListener('click', () => {
+                localStorage.setItem('cookiesAccepted', 'true');
+                cookieBanner.classList.add('hidden');
+            });
         }
 
         initializePage();
