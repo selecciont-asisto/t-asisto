@@ -1,113 +1,63 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Candidatos - T-Asisto</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Poppins', sans-serif; }
-        .candidate-item:hover { background-color: #f9fafb; }
-    </style>
-</head>
-<body class="bg-gray-50">
-    <header class="bg-white shadow-sm">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <img src="Logoprincipal.jpg" alt="Logo T-Asisto" class="h-11 w-auto">
-            <button id="logoutButton" class="text-sm font-medium text-gray-600 hover:text-indigo-600">Cerrar Sesión</button>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-6 py-12">
-        <div class="max-w-5xl mx-auto">
-            <h1 class="text-3xl font-bold mb-8">Portal de Candidatos</h1>
-
-            <div class="bg-white p-8 rounded-2xl shadow-lg">
-                <div id="loading" class="text-center py-10">
-                    <p class="text-lg text-gray-500">Cargando candidatos...</p>
-                </div>
-                <div id="candidateList" class="hidden">
-                    <!-- Los candidatos se cargarán aquí -->
-                </div>
-                 <div id="noCandidates" class="hidden text-center py-10">
-                    <p class="text-lg text-gray-500">No se han encontrado candidatos en la base de datos.</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Guardián de seguridad: si no hay "llave" de sesión, redirige al login.
-            if (sessionStorage.getItem('selectionAuth') !== 'true') {
-                window.location.href = 'login-seleccionados.html';
-                return;
-            }
-
-            // Funcionalidad del botón de cerrar sesión.
-            document.getElementById('logoutButton').addEventListener('click', () => {
-                sessionStorage.removeItem('selectionAuth');
-                window.location.href = 'login-seleccionados.html';
-            });
-
-            // Cargar la lista de candidatos al abrir la página.
-            fetchCandidates();
-        });
-
-        async function fetchCandidates() {
-            const loadingDiv = document.getElementById('loading');
-            const listDiv = document.getElementById('candidateList');
-            const noCandidatesDiv = document.getElementById('noCandidates');
-
-            try {
-                const response = await fetch('/api/get-seleccionados');
-                if (!response.ok) throw new Error('Error del servidor.');
-                
-                const candidates = await response.json();
-
-                loadingDiv.classList.add('hidden');
-
-                if (candidates.length === 0) {
-                    noCandidatesDiv.classList.remove('hidden');
-                } else {
-                    let html = '<div class="divide-y divide-gray-200">';
-                    candidates.forEach(candidate => {
-                        const submissionDate = new Date(candidate.submissionTimestamp).toLocaleDateString('es-CO');
-                        const psychometricEval = candidate.psychometricTest ? candidate.psychometricTest.evaluation : 'Pendiente';
-                        
-                        let evalColor = 'text-gray-500';
-                        if (psychometricEval === 'Apto') evalColor = 'text-green-600';
-                        if (psychometricEval === 'Apto con reservas') evalColor = 'text-yellow-600';
-                        if (psychometricEval === 'No apto') evalColor = 'text-red-600';
-
-                        html += `
-                            <div class="candidate-item p-4 flex justify-between items-center transition-colors">
-                                <a href="#" class="flex-grow">
-                                    <div>
-                                        <p class="font-bold text-lg text-indigo-700">${candidate.fullName}</p>
-                                        <p class="text-sm text-gray-600">${candidate.email}</p>
-                                        <p class="text-xs text-gray-400 mt-1">Enviado: ${submissionDate}</p>
-                                    </div>
-                                </a>
-                                <div class="text-right">
-                                    <p class="font-semibold ${evalColor}">${psychometricEval}</p>
-                                    <p class="text-sm text-gray-500">Puntaje: ${candidate.psychometricTest ? candidate.psychometricTest.score : 'N/A'}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                    
-                    listDiv.innerHTML = html;
-                    listDiv.classList.remove('hidden');
-                }
-
-            } catch (error) {
-                console.error(error);
-                loadingDiv.textContent = 'Error al cargar los candidatos.';
-            }
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (sessionStorage.getItem('selectionAuth') !== 'true') {
+            window.location.href = 'login-seleccionados.html';
+            return;
         }
-    </script>
-</body>
-</html>
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            sessionStorage.removeItem('selectionAuth');
+            window.location.href = 'login-seleccionados.html';
+        });
+        fetchCandidates();
+    });
+
+    async function fetchCandidates() {
+        const loadingDiv = document.getElementById('loading');
+        const listDiv = document.getElementById('candidateList');
+        const noCandidatesDiv = document.getElementById('noCandidates');
+        try {
+            const response = await fetch('/api/get-seleccionados');
+            if (!response.ok) throw new Error('Error del servidor.');
+            const candidates = await response.json();
+            loadingDiv.classList.add('hidden');
+
+            if (candidates.length === 0) {
+                noCandidatesDiv.classList.remove('hidden');
+            } else {
+                let html = '<div class="divide-y divide-gray-200">';
+                candidates.forEach(candidate => {
+                    // Si submissionTimestamp es 0, muestra 'Desconocida'
+                    const submissionDate = candidate.submissionTimestamp
+                      ? new Date(candidate.submissionTimestamp).toLocaleDateString('es-CO')
+                      : 'Desconocida';
+                    const psychometricEval = candidate.psychometricTest ? candidate.psychometricTest.evaluation : 'Pendiente';
+                    let evalColor = 'text-gray-500';
+                    if (psychometricEval === 'Apto') evalColor = 'text-green-600';
+                    if (psychometricEval === 'Apto con reservas') evalColor = 'text-yellow-600';
+                    if (psychometricEval === 'No apto') evalColor = 'text-red-600';
+                    html += `
+                        <div class="candidate-item p-4 flex justify-between items-center transition-colors">
+                            <a href="#" class="flex-grow">
+                                <div>
+                                    <p class="font-bold text-lg text-indigo-700">${candidate.fullName}</p>
+                                    <p class="text-sm text-gray-600">${candidate.email}</p>
+                                    <p class="text-xs text-gray-400 mt-1">Enviado: ${submissionDate}</p>
+                                </div>
+                            </a>
+                            <div class="text-right">
+                                <p class="font-semibold ${evalColor}">${psychometricEval}</p>
+                                <p class="text-sm text-gray-500">Puntaje: ${candidate.psychometricTest ? candidate.psychometricTest.score : 'N/A'}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                listDiv.innerHTML = html;
+                listDiv.classList.remove('hidden');
+            }
+        } catch (error) {
+            console.error(error);
+            loadingDiv.textContent = 'Error al cargar los candidatos.';
+        }
+    }
+</script>
