@@ -1,0 +1,14 @@
+{
+  "name": "t-asisto-backend",
+  "version": "1.0.0",
+  "description": "Funciones de servidor para el proceso de selección de T-Asisto.",
+  "main": "index.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  },
+  "author": "Jorge",
+  "license": "ISC"
+}
