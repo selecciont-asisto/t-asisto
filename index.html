@@ -37,7 +37,7 @@
                 <!-- Sección de Ubicación Geográfica -->
                 <div id="locationSection">
                     <h2 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Ubicación Geográfica</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="country" class="block text-sm font-medium text-gray-700 mb-1">País</label>
                             <select id="country" name="country" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-3 py-2" required>
@@ -56,6 +56,10 @@
                                 <option value="">Seleccione...</option>
                             </select>
                         </div>
+                        <div class="md:col-span-2">
+                            <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
+                            <input type="text" id="address" name="address" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-3 py-2" required>
+                        </div>
                     </div>
                 </div>
     
@@ -68,6 +72,16 @@
                             <div>
                                 <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
                                 <input type="text" id="fullName" name="fullName" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-3 py-2" required>
+                            </div>
+                            <div>
+                                <label for="idType" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Identificación</label>
+                                <select id="idType" name="idType" class="w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-3 py-2" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="Cédula">Cédula</option>
+                                    <option value="Cédula de Extranjería">Cédula de Extranjería</option>
+                                    <option value="Permiso Especial de Trabajo/Permanencia">Permiso Especial de Trabajo/Permanencia</option>
+                                    <option value="Pasaporte">Pasaporte</option>
+                                </select>
                             </div>
                             <div>
                                 <label for="idNumber" class="block text-sm font-medium text-gray-700 mb-1">Número de Identificación</label>
