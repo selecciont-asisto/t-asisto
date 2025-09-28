@@ -60,13 +60,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('selectionAuth') !== 'true') {
-                window.location.href = 'login-seleccionados.html';
+                window.location.href = 'login.html'; // CORREGIDO
                 return;
             }
             
             document.getElementById('logoutButton').addEventListener('click', () => {
                 sessionStorage.removeItem('selectionAuth');
-                window.location.href = 'login-seleccionados.html';
+                window.location.href = 'login.html'; // CORREGIDO
             });
             
             fetchCandidateDetails();
