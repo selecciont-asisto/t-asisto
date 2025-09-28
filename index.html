@@ -342,15 +342,14 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Server response was not ok');
+                    throw new Error('La respuesta del servidor no fue exitosa');
                 }
 
                 const result = await response.json();
-                console.log('Success:', result);
+                console.log('Éxito:', result);
                 
-                // Guardar la "llave" para la siguiente página
                 sessionStorage.setItem('completedCharacterization', 'true');
-                sessionStorage.setItem('candidateId', result.id); // Guardar el ID del nuevo candidato
+                sessionStorage.setItem('candidateId', result.id); 
 
                 formContainer.classList.add('hidden');
                 successContainer.classList.remove('hidden');
