@@ -41,14 +41,14 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Guardián de seguridad: si no hay "llave" de sesión, redirige al login.
             if (sessionStorage.getItem('selectionAuth') !== 'true') {
-                window.location.href = 'login-seleccionados.html';
+                window.location.href = 'login.html'; // CORREGIDO
                 return;
             }
 
             // Funcionalidad del botón de cerrar sesión.
             document.getElementById('logoutButton').addEventListener('click', () => {
                 sessionStorage.removeItem('selectionAuth');
-                window.location.href = 'login-seleccionados.html';
+                window.location.href = 'login.html'; // CORREGIDO
             });
 
             // Cargar la lista de candidatos al abrir la página.
@@ -61,7 +61,7 @@
             const noCandidatesDiv = document.getElementById('noCandidates');
 
             try {
-                const response = await fetch('/api/get-candidatos'); // Ruta corregida
+                const response = await fetch('/api/get-candidatos');
                 if (!response.ok) throw new Error('Error del servidor.');
                 
                 const candidates = await response.json();
@@ -81,7 +81,6 @@
                         if (psychometricEval === 'Apto con reservas') evalColor = 'text-yellow-600';
                         if (psychometricEval === 'No apto') evalColor = 'text-red-600';
 
-                        // --- CAMBIO: Se envuelve en una etiqueta <a> con el enlace correcto ---
                         html += `
                             <a href="detalle-candidato.html?id=${candidate.id}" class="candidate-item p-4 flex justify-between items-center transition-colors">
                                 <div class="flex-grow">
@@ -112,3 +111,4 @@
     </script>
 </body>
 </html>
+
