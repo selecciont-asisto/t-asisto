@@ -29,7 +29,7 @@
                 <!-- Fecha de Diligenciamiento (Automática) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="submissionDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Diligenciamiento</label>
+                        <label for="submissionDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Dilenciamiento</label>
                         <input type="text" id="submissionDate" name="submissionDate" readonly class="w-full bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 cursor-not-allowed px-3 py-2">
                     </div>
                 </div>
@@ -153,7 +153,7 @@
                     </div>
                      <!-- Botón de envío -->
                     <div class="flex justify-end pt-4">
-                        <button type="submit" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300">
+                        <button type="submit" id="submitButton" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300 disabled:opacity-50" disabled>
                             Continuar
                         </button>
                     </div>
@@ -178,7 +178,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firestore.js";
         
         // --- CONFIGURACIÓN DE FIREBASE ---
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -207,6 +207,7 @@
     
             } catch (error) {
                 console.error("Error al inicializar Firebase:", error);
+                alert("Error crítico de inicialización. Por favor, recargue la página.");
             }
         }
 
@@ -225,7 +226,7 @@
         const ageAlert = document.getElementById('ageAlert');
         const experienceSection = document.getElementById('experienceSection');
         const availabilitySection = document.getElementById('availabilitySection');
-        const continueButton = form.querySelector('button[type="submit"]');
+        const continueButton = document.getElementById('submitButton');
         const experienceDetailsContainer = document.getElementById('experienceDetailsContainer');
         const experienceRadioButtons = document.querySelectorAll('input[name="hasExperience"]');
 
@@ -396,6 +397,13 @@
         
         async function initializePage() {
             await initFirebase();
+            
+            if (userId) {
+                continueButton.disabled = false;
+            } else {
+                console.error("La autenticación falló, el botón de envío permanecerá deshabilitado.");
+            }
+
             setSubmissionDate();
             mainFormContent.classList.remove('hidden');
             loadGeoData();
