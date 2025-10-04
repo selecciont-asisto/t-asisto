@@ -1,0 +1,578 @@
+export const TEST_DATA = {
+  preguntas: [
+    {
+      id: 1,
+      pregunta:
+        "¿Cuál de estas frases describe mejor tu motivación para ayudar a los demás?",
+      opciones: [
+        {
+          respuesta:
+            "Me siento feliz y realizado cuando mi ayuda es valiosa y viene de un lugar donde yo también me siento bien.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Ayudar a los demás es mi deber, incluso si a veces me agota o me quita tiempo para mí.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Ayudo esperando que luego las personas me retribuyan el favor de alguna manera.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Ayudo solo si la tarea es sencilla y no me implica mucho esfuerzo.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 2,
+      pregunta:
+        "Un adulto mayor te dice: 'Me siento muy torpe, se me cae todo de las manos. ¡Es inútil intentar hacer esto!'. ¿Qué le responderías?",
+      opciones: [
+        {
+          respuesta:
+            "Le dirías: 'No se preocupe, es normal sentirse así a su edad, no es su culpa'.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le animarías: 'No es tan complicado, con un poco de práctica lo logrará fácilmente'.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le preguntarías: 'Entiendo que se sienta así. ¿Qué cree que necesitaría para que esto le resulte un poco menos desafiante o para que lo intente de otra manera?'",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Le dirías: 'Sí, a veces las cosas son difíciles, pero debe esforzarse'.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 3,
+      pregunta:
+        "Tienes un compromiso personal importante, pero el adulto mayor te pide que hagas una diligencia urgente que te tomaría todo el tiempo. ¿Cómo manejarías la situación?",
+      opciones: [
+        {
+          respuesta:
+            "Cancelarías tu compromiso personal, porque el adulto mayor es tu prioridad.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le dirías que no puedes ir y que debe buscar a otra persona o esperar.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Con respeto, le explicarías que tienes un compromiso importante que no puedes cambiar, y le ayudarías a buscar otra solución o momento para la diligencia.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Harías la diligencia de mala gana y luego te quejarías con tus amigos sobre lo exigente que es.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 4,
+      pregunta:
+        "Un adulto mayor, que está postrado en cama, te comenta: 'Mi vida ya no tiene sentido, no puedo hacer nada de lo que me gustaba'. ¿Cómo lo guiarías?",
+      opciones: [
+        {
+          respuesta:
+            "Le dirías: 'Claro que sí, ¡hay muchas cosas que aún puede hacer!'.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Lo animarías a enfocarse en sus recuerdos felices para que no se sienta mal.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le preguntarías: 'A pesar de sus limitaciones físicas, ¿qué cosas dentro de usted, como sus pensamientos, sus ideas, su actitud o sus afectos, aún puede elegir y controlar para darle un nuevo sentido a su día a día?'",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Le sugerirías que vea más televisión o escuche música para distraerse y no pensar en ello.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 5,
+      pregunta:
+        "Estás a punto de iniciar el acompañamiento con un adulto mayor. ¿Qué te parece lo más importante establecer en su primera conversación?",
+      opciones: [
+        {
+          respuesta:
+            "Una lista detallada de todas las prohibiciones y lo que el adulto mayor no debe hacer.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Asegurarle que este es un espacio completamente seguro, donde puede expresarse libremente, sin que haya juicios o críticas sobre lo que diga o sienta.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Explicarle que no eres un juez y que no te importa lo que haya hecho en el pasado.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Definir quién tiene el control y la última palabra en las decisiones diarias.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 6,
+      pregunta:
+        "Un familiar del adulto mayor tiene una idea muy diferente a la tuya sobre cómo ayudarlo, y la discusión se vuelve tensa. ¿Cómo buscarías resolver esta diferencia?",
+      opciones: [
+        {
+          respuesta:
+            "Intentarías convencerlos de que tu idea es la 'buena' y la suya es la 'mala'.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Te enfocarías en entender qué es lo más importante para cada uno (sus 'intereses'), más allá de la idea específica que están defendiendo, para encontrar una solución que beneficie a todos.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Pondrías fin a la discusión y harías lo que consideres 'correcto' sin su opinión.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Dejarías que el familiar tome la decisión para evitar el conflicto, incluso si no estás de acuerdo.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 7,
+      pregunta:
+        "Si el adulto mayor te pide realizar una tarea que sabes que podría hacer por sí mismo con un poco de guía, ¿qué harías, teniendo en cuenta la idea de fomentar su autonomía?",
+      opciones: [
+        {
+          respuesta:
+            "Lo harías por él para ahorrar tiempo y evitar que se frustre.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le dirías 'no, usted puede hacerlo solo' sin más explicaciones.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le preguntarías: '¿Qué parte de la tarea se le hace más compleja o dónde siente que necesita un apoyo para que usted pueda hacerlo?'",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Le dirías que si no lo hace, no podrás seguir ayudándole en otras cosas.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 8,
+      pregunta:
+        "Imagina que el adulto mayor está pasando por un momento de gran tristeza y te dice: 'No sé para qué sigo aquí, ya no encuentro ningún sentido a mi vida'. ¿Cuál sería tu enfoque para ayudarle?",
+      opciones: [
+        {
+          respuesta:
+            "Le dirías que no se preocupe, que la tristeza pasará pronto y que debe ser fuerte.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le ayudarías a recordar momentos felices del pasado para que se sienta mejor.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le escucharías activamente, validando su sentimiento, y luego le preguntarías si hay algo, por pequeño que sea, que aún le dé una chispa de interés o una razón para continuar.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Le sugerirías visitar a un familiar o amigo para que lo animen.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 9,
+      pregunta:
+        "Tienes un plan de actividades bien organizado para el adulto mayor, pero un día él se siente mal anímicamente y no quiere hacer nada. ¿Cómo adaptarías tu 'proyecto' de ese día?",
+      opciones: [
+        {
+          respuesta:
+            "Insistirías en seguir el plan, porque la estructura es importante para la disciplina.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Cancelarías todas las actividades y te irías, ya que no se puede trabajar así.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Buscarías entender qué le sucede y adaptarías el plan a su estado anímico, quizás posponiendo algunas cosas o cambiando a actividades más tranquilas y reconfortantes.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Le dirías que está 'mal' no querer hacer nada y que debe esforzarse para seguir el plan.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 10,
+      pregunta:
+        "Si tu propósito general en la vida fuera 'ayudar a las personas a encontrar su propia felicidad y bienestar', ¿cómo se vería eso reflejado en tu día a día como acompañante?",
+      opciones: [
+        {
+          respuesta:
+            "Me enfocaría en hacer todo por el adulto mayor para que no tenga preocupaciones.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Priorizaría su seguridad y comodidad, sin preocuparme mucho por su estado emocional o sus metas personales a largo plazo.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Ayudaría al adulto mayor a identificar lo que le hace feliz, lo que le da propósito, y lo apoyaría en pequeños proyectos o actividades que le permitan vivir con más plenitud, siempre cuidando mi propio bienestar.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Les daría consejos y les diría lo que deben hacer para ser felices.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 11,
+      pregunta:
+        "Mientras caminan, el adulto mayor se mueve muy lentamente y te estás retrasando para la siguiente actividad. ¿Qué haces?",
+      opciones: [
+        {
+          respuesta:
+            "Le digo que necesitamos apurarnos o no llegaremos a tiempo.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Me adapto a su ritmo con paciencia, entendiendo que su bienestar es más importante que el horario.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Busco un atajo o una forma de hacer la tarea por él para acelerar el proceso.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Muestro mi frustración con gestos o suspiros para que entienda que vamos tarde.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 12,
+      pregunta:
+        "El adulto mayor no encuentra sus gafas y acusa, sin pruebas, a una persona de la limpieza de habérselas robado. ¿Cómo reaccionas?",
+      opciones: [
+        {
+          respuesta:
+            "Le digo inmediatamente que está equivocado y que no debería acusar a la gente.",
+          puntuacion: -1,
+        },
+        {
+          respuesta: "Ignoro el comentario para no generar un problema mayor.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Valido su preocupación por el objeto perdido y le digo: 'Entiendo que esté preocupado. ¿Por qué no buscamos juntos con calma antes de pensar en otra cosa?'",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Confronto a la persona de la limpieza para preguntarle sobre las gafas.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 13,
+      pregunta:
+        "Como agradecimiento, la familia del adulto mayor te ofrece un regalo costoso. ¿Qué haces?",
+      opciones: [
+        {
+          respuesta: "Lo acepto felizmente, me lo he ganado con mi trabajo.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Lo rechazo de forma tajante para que entiendan que no es correcto.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Agradezco enormemente el gesto, pero explico amablemente que las políticas de mi trabajo no me permiten aceptar regalos, asegurándoles que su confianza es el mejor agradecimiento.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Acepto el regalo, pero no se lo comento a nadie de la empresa.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 14,
+      pregunta:
+        "Notas que el adulto mayor ha perdido interés en actividades que antes disfrutaba y parece más apático. ¿Cuál es tu estrategia?",
+      opciones: [
+        {
+          respuesta:
+            "Sigo con la rutina establecida, pensando que es solo una fase temporal.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le digo que tiene que poner más de su parte para sentirse mejor.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Inicio una conversación casual sobre cosas que le gustaban en el pasado, para ver si alguna despierta su interés y proponer una actividad simple relacionada con ello.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Le pongo la televisión todo el día para que al menos esté entretenido.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 15,
+      pregunta:
+        "El adulto mayor tropieza y sufre una caída leve en casa. No parece herido, pero está muy asustado y avergonzado. ¿Qué es lo primero que haces?",
+      opciones: [
+        {
+          respuesta:
+            "Le digo: '¡No pasó nada, levántese rápido que no es para tanto!'.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Entro en pánico y empiezo a gritar pidiendo ayuda, aumentando su ansiedad.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Me arrodillo a su lado, mantengo la calma, le pregunto si siente algún dolor y lo tranquilizo antes de ayudarlo a levantarse de forma segura.",
+          puntuacion: 1,
+        },
+        {
+          respuesta: "Lo levanto rápidamente sin preguntarle cómo se siente.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 16,
+      pregunta:
+        "En el supermercado, el cajero te da 10 dólares de más en el cambio por error. El adulto mayor que acompañas no se da cuenta. ¿Qué haces?",
+      opciones: [
+        {
+          respuesta:
+            "Me guardo el dinero. Nadie se dio cuenta, así que no es un problema.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le doy el dinero extra al adulto mayor para que se ponga contento.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Inmediatamente le digo al cajero sobre el error y le devuelvo el dinero.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Espero a salir de la tienda para decidir qué hacer con el dinero.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 17,
+      pregunta:
+        "Están jugando a las cartas y el adulto mayor insiste en aplicar una regla que no existe para poder ganar. ¿Cómo lo manejas?",
+      opciones: [
+        {
+          respuesta:
+            "Le explico firmemente que esa no es la regla y que debe jugar correctamente.",
+          puntuacion: -1,
+        },
+        {
+          respuesta: "Lo acuso de hacer trampa y me niego a seguir jugando.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Sonrío y acepto su regla, entendiendo que el objetivo es la diversión y la conexión, no la competencia.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Dejo que gane esa ronda pero luego impongo las reglas correctas para las siguientes.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 18,
+      pregunta:
+        "Durante dos días seguidos, notas que el adulto mayor apenas toca su comida favorita. ¿Qué acción tomas?",
+      opciones: [
+        {
+          respuesta: "No le doy importancia, ya comerá cuando tenga hambre.",
+          puntuacion: -1,
+        },
+        {
+          respuesta: "Insisto y trato de obligarlo a comer un poco más.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Le pregunto con amabilidad si hay algo que le moleste o si la comida no le apetece, y comunico esta novedad a su familia o al supervisor.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Le ofrezco postre o dulces en lugar de la comida para asegurarme de que coma algo.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 19,
+      pregunta:
+        "El adulto mayor, sin mala intención, hace un comentario desafortunado sobre tu ropa. ¿Cómo te afecta?",
+      opciones: [
+        {
+          respuesta:
+            "Me ofendo y me muestro distante y frío con él el resto del día.",
+          puntuacion: -1,
+        },
+        {
+          respuesta: "Le respondo con una crítica sobre su propia apariencia.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Asumo que no tuvo mala intención, lo dejo pasar sin darle importancia y continúo mi trabajo con la misma amabilidad.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Le explico detalladamente por qué su comentario fue inapropiado y le pido que no lo vuelva a hacer.",
+          puntuacion: -1,
+        },
+      ],
+    },
+    {
+      id: 20,
+      pregunta:
+        "¿Qué significa para ti 'tener éxito' en este puesto de trabajo?",
+      opciones: [
+        {
+          respuesta:
+            "Cumplir con todas las tareas asignadas en mi horario sin recibir quejas.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Convertirme en la persona de confianza indispensable para el adulto mayor.",
+          puntuacion: -1,
+        },
+        {
+          respuesta:
+            "Lograr que, gracias a mi apoyo, el adulto mayor se sienta un poco más autónomo, seguro y animado en su día a día.",
+          puntuacion: 1,
+        },
+        {
+          respuesta:
+            "Asegurarme de que la familia esté siempre contenta con mi desempeño.",
+          puntuacion: -1,
+        },
+      ],
+    },
+  ],
+};
+
+export const BAREMO = [
+  {
+    rango_puntuacion: [14, 20],
+    evaluacion: "Apto",
+    mensaje:
+      "Gracias por completar la prueba. Hemos registrado tus respuestas.",
+  },
+  {
+    rango_puntuacion: [6, 13],
+    evaluacion: "Apto con reservas",
+    mensaje:
+      "Gracias por completar la prueba. Hemos registrado tus respuestas.",
+  },
+  {
+    rango_puntuacion: [-20, 5],
+    evaluacion: "No apto",
+    mensaje:
+      "Agradecemos tu interés en formar parte de T-Asisto. En esta ocasión, tu perfil no se ajusta completamente a los requisitos del puesto. Te deseamos mucho éxito en tu búsqueda.",
+  },
+];
+
+export const QUESTION_DATA = {
+  preguntas: [
+    {
+      id: 1,
+      pregunta:
+        "Describe una situación en la que tuviste que lidiar con una persona difícil o un conflicto interpersonal. ¿Cómo lo manejaste y qué aprendiste de la experiencia?",
+    },
+    {
+      id: 2,
+      pregunta:
+        "Más allá de la necesidad económica, ¿qué te atrae específicamente de trabajar con y para adultos mayores? ¿Qué crees que puedes aportarles a nivel personal?",
+    },
+    {
+      id: 3,
+      pregunta:
+        "Describe una de tus mayores fortalezas y un área en la que crees que podrías mejorar. ¿Cómo aplicas esa fortaleza en tu vida y qué haces para trabajar en tu área de mejora?",
+    },
+  ],
+};
