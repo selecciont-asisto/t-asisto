@@ -1,3 +1,35 @@
+// Helper function to set CORS headers
+export function setCorsHeaders(res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+}
+
+// Helper function to validate API key from request headers
+export function validateApiKey(req) {
+  const apiKey =
+    req.headers["x-api-key"] ||
+    req.headers["authorization"]?.replace("Bearer ", "");
+  const validApiKey = process.env.API_KEY;
+
+  if (!validApiKey) {
+    console.error("API_KEY environment variable is not configured");
+    return false;
+  }
+
+  return apiKey === validApiKey;
+}
+
+// Helper function to send unauthorized response
+export function sendUnauthorizedResponse(res) {
+  return res
+    .status(401)
+    .json({ message: "No autorizado. API key inválida o faltante." });
+}
+
 export const TEST_DATA = {
   preguntas: [
     {
