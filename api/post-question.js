@@ -1,6 +1,6 @@
 import admin from "./firebaseAdmin.js";
-import { setCorsHeaders } from "./utils/cors.js";
-import { validateApiKey, sendUnauthorizedResponse } from "./utils/auth.js";
+import { setCorsHeaders } from "../utils/cors.js";
+import { validateApiKey, sendUnauthorizedResponse } from "../utils/auth.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
