@@ -24,14 +24,12 @@ export default async function handler(req, res) {
       const db = admin.firestore();
       const candidateRef = db.collection("candidates").doc(candidateId);
 
-      let questionAnswers = {};
-      for (const [key, value] of answers) {
-        questionAnswers["q" + key] = { answer: value };
-      }
       // Añadimos las respuestas a las preguntas abiertas al documento del candidato
       await candidateRef.update({
         openQuestions: {
-          questionAnswers,
+          conflicto_experiencia: answers[0][1],
+          motivacion_aporte: answers[1][1],
+          fortaleza_mejora: answers[2][1],
           submissionTimestamp: new Date().toISOString(),
         },
       });
